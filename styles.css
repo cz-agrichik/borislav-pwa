@@ -1,0 +1,359 @@
+:root {
+  /* без искусственных отступов */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #eef2ff;
+  color: #222;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 0;
+
+  /* правильная высота на мобилках */
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+
+  /* только safe-area, без "припасов" */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ---------- HEADER ---------- */
+
+header.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #4f46e5;
+  color: white;
+
+  padding: 0.6rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+/* запрещаем переносы там, где он выглядит “как баг” */
+.score-box,
+.mode-btn {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.score-box {
+  background: white;
+  color: #4f46e5;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  font-weight: bold;
+  font-size: 1.1rem;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.score-box:active {
+  transform: scale(0.96);
+}
+
+.mode-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.mode-btn:active {
+  background: #34d399;
+}
+
+.mode-btn:disabled {
+  opacity: 0.95;
+  cursor: default;
+}
+
+
+/* ---------- MAIN ---------- */
+
+main {
+  flex: 1 1 auto;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding-left: max(12px, env(safe-area-inset-left));
+  padding-right: max(12px, env(safe-area-inset-right));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.task {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.answer {
+  font-size: 2rem;
+  height: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: 0.2rem;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 10px;
+}
+
+button {
+  font-size: 1.8rem;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+}
+
+button:active {
+  background: #6366f1;
+}
+
+.feedback {
+  font-size: 2rem;
+  height: 2rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+#statsBtn {
+  cursor: pointer;
+  border: none;
+}
+
+#statsBtn:active {
+  transform: scale(0.97);
+}
+
+/* ---------- SUCCESS OVERLAY ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  backdrop-filter: blur(6px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  width: min(540px, 92vw);
+  background: white;
+  border-radius: 22px;
+  padding: 18px 16px 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  transform: scale(0.98);
+  animation: pop 180ms ease-out forwards;
+}
+
+/* Улучшенная статистика */
+#statsOverlay .overlay-card {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#statsBody {
+  overflow-y: auto;
+  margin-top: 10px;
+  padding-right: 6px;
+}
+
+/* аккуратный скролл */
+#statsBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+#statsBody::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 6px;
+}
+
+
+@keyframes pop {
+  to {
+    transform: scale(1);
+  }
+}
+
+.overlay-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.overlay-sub {
+  font-size: 1.05rem;
+  color: #334155;
+  margin-top: 8px;
+}
+
+/* ---------- DONUT ---------- */
+
+.donut-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.donut-svg {
+  width: 190px;
+  height: 190px;
+}
+
+.donut-seg {
+  transition: opacity 220ms ease, transform 220ms ease;
+  transform-origin: 95px 95px;
+}
+
+.donut-seg.filled {
+  opacity: 1;
+}
+
+.donut-seg.empty {
+  opacity: 0.18;
+}
+
+/* ---------- LANDSCAPE (мягкий) ---------- */
+
+@media (orientation: landscape) {
+  main {
+    width: min(980px, 100%);
+    padding: 10px 12px;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "task keypad"
+      "answer keypad"
+      "feedback keypad";
+
+    column-gap: 16px;
+    row-gap: 8px;
+
+    place-content: center;
+    align-items: center;
+    justify-items: center;
+
+    min-height: 0;
+  }
+
+  #task {
+    grid-area: task;
+    font-size: clamp(2rem, 4.2vw, 3rem);
+    margin: 0;
+  }
+
+  #answer {
+    grid-area: answer;
+    font-size: clamp(1.4rem, 3.2vw, 2.2rem);
+    margin: 0;
+  }
+
+  #feedback {
+    grid-area: feedback;
+    margin: 0;
+  }
+
+  #keypad {
+    grid-area: keypad;
+    grid-template-columns: repeat(3, 68px);
+    gap: 8px;
+  }
+
+  #keypad button {
+    font-size: 1.45rem;
+    padding: 10px;
+    border-radius: 12px;
+  }
+}
+
+/**etc**/
+.selected-piece{
+  box-shadow: inset 0 0 0 4px #22c55e;
+  background-color: rgba(34,197,94,0.25);
+  transition: all 0.15s ease;
+}
+
+#chessBoard div{
+  transition: transform 0.08s ease;
+}
+
+#chessBoard div:active{
+  transform: scale(0.92);
+}
+
+/* --- SPA pages --- */
+
+#mainPage,
+#userPage {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+/* только когда НЕ hidden */
+#mainPage:not([hidden]),
+#userPage:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+}
+
+/**/
+.robux-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+
+  background: url('robux-48.png') no-repeat center/contain;
+
+  margin-left: 3px;
+
+  vertical-align: middle;
+  transform: translateY(-2px);
+
+  image-rendering: -webkit-optimize-contrast;
+}

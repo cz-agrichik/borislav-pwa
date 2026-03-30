@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Енотик-математик</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#2e3a59" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="donut.js"></script>
+    <script src="user.js"></script>
+    
+     <script src="course.js"></script>
+
+    <script src="moves_all.js"></script>
+
+    <script src="queen_capture.js"></script>
+    <script src="rook_capture.js"></script>
+    <script src="bishop_capture.js"></script>
+    <script src="knight_capture.js"></script>
+    <script src="king_capture.js"></script>
+    <script src="pawn_capture.js"></script>
+
+    <script src="rook_mate.js"></script>
+    <script src="queen_mate.js"></script>
+
+    <script src="linear_mate_rook.js"></script>
+
+    <script src="kq_squeeze_all.js"></script>
+
+    <script src="addition.js"></script>
+    
+    <script src="problems.js"></script>
+    <script src="stats.js"></script>
+    <script src="stats-ui.js"></script>
+    <script src="chess-ui.js"></script>
+    <script src="chess-utils.js"></script>
+
+    
+
+    <style>
+        
+    </style>
+  </head>
+  <body>
+
+  <div id="mainPage">
+    <header class="topbar">
+      <button id="statsBtn" class="score-box">
+        <span id="scoreValue">0</span>
+      </button>
+      <button id="modeBtn" class="mode-btn">Борислав</button>
+    </header>
+
+    <main>
+      <div class="task" id="task"></div>
+      <div class="answer" id="answer"></div>
+      <div id="chessBoard"></div>
+      <div class="keypad" id="keypad"></div>
+      <div class="feedback" id="feedback"></div>
+    </main>
+  </div>
+  <div id="userPage" hidden></div>
+
+  <!-- Success overlay -->
+  <div id="successOverlay" class="overlay hidden" aria-hidden="true">
+  <div class="overlay-card">
+      <div class="overlay-title">Отлично!</div>
+      <div id="donutWrap" class="donut-wrap"></div>
+      <div class="overlay-sub">Ещё чуть-чуть ✨</div>
+  </div>
+  </div>
+
+  <!-- Stats overlay (session only) -->
+  <div id="statsOverlay" class="overlay hidden" aria-hidden="true">
+    <div class="overlay-card">
+      <div class="overlay-title">Статистика (сессия)</div>
+      <div id="statsBody" class="overlay-sub" style="text-align:left;"></div>
+      <div style="margin-top:12px;">
+        <button id="statsCloseBtn" class="mode-btn" style="background:#10b981;">Закрыть</button>
+      </div>
+    </div>
+  </div>
+  
+  
+
+  <script>
+
+    if (document.referrer.startsWith('android-app://')) {
+  alert("Это TWA");
+} else {
+  alert("Это браузер");
+  alert(navigator.userAgent);
+}
+    
+
+  const ENABLE_DONUT = false;  
+
+  const taskEl = document.getElementById("task");
+  const answerEl = document.getElementById("answer");
+  const keypadEl = document.getElementById("keypad");
+  const feedbackEl = document.getElementById("feedback");
+  const scoreEl = document.getElementById("scoreValue");
+  const scoreBox = document.querySelector(".score-box");
+  const modeBtn = document.getElementById("modeBtn");
+  const chessBoardEl = document.getElementById("chessBoard");
+  chessBoardEl.style.display = "none";
+  ChessUI.init(chessBoardEl);
+
+  const statsBtn = document.getElementById("statsBtn");
+  const statsOverlay = document.getElementById("statsOverlay");
+  const statsBody = document.getElementById("statsBody");
+  const statsCloseBtn = document.getElementById("statsCloseBtn");
+
+  const successOverlay = document.getElementById("successOverlay");
+  const donutWrap = document.getElementById("donutWrap");
+
+  const GOAL_N = 20;   // сколько задач до "заполненного" доната
+  let progress = 0;    // прогресс: +1 за решённую задачу
+
+  let correct;
+  window.errorsInRow = 0;
+  renderScore();
+
+  User.init(document.getElementById("userPage"));
+  modeBtn.textContent = User.get().name;
+
+  User.onChange((u) => {
+    modeBtn.textContent = u.name;
+    renderScore();
+  });
+
+  modeBtn.addEventListener("click", () => {
+    User.open();
+  });
+
+
+  function renderMathTask(p) {
+    correct = p.correct;
+
+    keypadEl.style.display = "grid";
+    answerEl.style.display = "block";
+    chessBoardEl.style.display = "none";
+
+    answerEl.textContent = "";
+  }
+
+  function renderChessBoard(p) {
+    keypadEl.style.display = "none";
+    answerEl.style.display = "none";
+    chessBoardEl.style.display = "grid";
+
+    ChessUI.renderBoard(p);
+  }
+  
+
+  function newTask() {
+    window.errorsInRow = 0;
+    ChessUI.clearHints();
+
+    const p = window.ProblemGen.chooseProblem();
+
+    currentProblem = p;
+
+    taskEl.textContent = p.text;
+
+    console.log("newtask");
+    console.log(p);
+
+    if (p.type === "chess") {
+      renderChessBoard(p);
+    } else {
+      renderMathTask(p);
+    }
+
+    Stats.startTask(p.text, p.id, p.title);
+
+    
+    answerEl.textContent = "";
+    feedbackEl.textContent = "";
+  }
+
+  function checkAnswer() {
+    const val = parseInt(answerEl.textContent, 10);
+    const isCorrect = val === correct;
+
+    Stats.recordAttempt(isCorrect, 10);
+
+    if (isCorrect) {      
+      success();
+    } else {      
+      unsuccess();
+    }
+  }
+
+  function success() {
+    User.recordTopicSuccess(currentProblem.id);
+
+    renderScore();
+
+    scoreBox.classList.add("bump");
+    setTimeout(() => scoreBox.classList.remove("bump"), 2000);
+
+    progress = Math.min(GOAL_N, progress + 1);
+
+    if (ENABLE_DONUT) {
+      DonutUI.showSuccessOverlay({
+        overlayEl: successOverlay,
+        donutWrap,
+        n: GOAL_N,
+        filledCount: progress,
+        duration: 1500,
+      });
+
+      if (progress >= GOAL_N) {
+        setTimeout(() => {
+          progress = 0;
+        }, 650);
+      }
+    }
+
+    feedbackEl.textContent = "✅";
+
+    setTimeout(() => {
+      feedbackEl.textContent = "";
+    }, 500);
+    
+    setTimeout(newTask, 650);
+  }
+
+  function successWithHint() {
+    feedbackEl.textContent = "💡";
+
+    setTimeout(() => {
+      feedbackEl.textContent = "";
+      newTask();
+    }, 800);
+  }
+
+  function unsuccess() {
+    User.recordTopicFail(currentProblem.id);
+
+    window.errorsInRow+=1;
+
+    if (window.errorsInRow === 2 && currentProblem.type === "chess") {
+      ChessUI.showHints(currentProblem.legalMoves);
+    }
+
+    feedbackEl.textContent = "❌";
+
+    setTimeout(() => {
+      feedbackEl.textContent = "";
+      answerEl.textContent = "";
+    }, 800);
+  }
+
+  function renderScore() {
+    const val = Math.floor(Stats.getScore() / 5);
+    const symbol = User.getPointsSymbol();
+
+    if (symbol === "robux") {
+      scoreEl.innerHTML = `${val}<span class="robux-icon"></span>`;
+    } else {
+      scoreEl.textContent = symbol ? `${val}${symbol}` : val;
+    }
+  }
+
+  const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "←", "0", "OK"];
+  keys.forEach((k) => {
+    const btn = document.createElement("button");
+    btn.textContent = k;
+    btn.onclick = () => {
+      if (k === "←") {
+        answerEl.textContent = answerEl.textContent.slice(0, -1);
+      } else if (k === "OK") {
+        checkAnswer();
+      } else {
+        if (answerEl.textContent.length < 3) {
+          answerEl.textContent += k;
+        }
+      }
+    };
+    keypadEl.appendChild(btn);
+  });
+
+  statsBtn.addEventListener("click", () => {
+    window.StatsUI.open(statsOverlay, statsBody);
+  });
+
+  statsCloseBtn.addEventListener("click", () => {
+    window.StatsUI.close(statsOverlay);
+  });
+
+  newTask();
+</script>
+  <script src="sw-register.js" defer></script>
+</body>
+</html>
