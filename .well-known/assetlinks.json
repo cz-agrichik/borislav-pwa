@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "angr.borislavpwac",
+      "sha256_cert_fingerprints": [
+        "47:37:2F:96:90:CF:22:92:90:D2:7C:36:29:7D:B2:2D:5A:BC:15:8C:8B:99:C1:FF:49:35:E8:B6:1B:53:45:33"
+      ]
+    }
+  }
+]
