@@ -159,4 +159,6 @@ window.Course = [
         name: "Мат ♔ + ♕, техника прижатия (2)",
         prereq: ["queen_mate"]
     },
+
+  { id:"knight_fork", name:"Вилка конём", prereq:["knight_capture"] },
 ];

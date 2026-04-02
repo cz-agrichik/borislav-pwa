@@ -164,6 +164,8 @@ function genMathFromDataset(list, tag, typeId) {
 
     {id:"kq_squeeze", gen:()=>genFromDataset(window.KQSqueezeProblems, "kq_squeeze")},
     {id:"kq_squeeze2", gen:()=>genFromDataset(window.KQSqueezeV2Problems, "kq_squeeze2")},
+
+    {id:"knight_fork", gen:()=>genFromDataset(window.KnightForkProblems, "knight_fork")},
   ];
 
   function taskTypeTitle(typeId) {
@@ -223,6 +225,10 @@ function genMathFromDataset(list, tag, typeId) {
   let difficultyPolicy = getDifficultyPolicy();
 
   function resolveLevel(node) {
+    if (node.test) {
+      return "test";
+    }
+
     const stats = window.User.getTopicStats(node.id);
     const ms = stats.maxStreak;
 
