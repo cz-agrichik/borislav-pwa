@@ -166,6 +166,8 @@ function genMathFromDataset(list, tag, typeId) {
     {id:"kq_squeeze2", gen:()=>genFromDataset(window.KQSqueezeV2Problems, "kq_squeeze2")},
 
     {id:"knight_fork", gen:()=>genFromDataset(window.KnightForkProblems, "knight_fork")},
+
+    {id:"rookendgame_mate1", gen:()=>genFromDataset(window.MateIn1Problems, "rookendgame_mate1")},
   ];
 
   function taskTypeTitle(typeId) {

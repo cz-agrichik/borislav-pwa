@@ -161,4 +161,6 @@ window.Course = [
     },
 
   { id:"knight_fork", name:"Вилка конём", prereq:["knight_capture"] },
+
+  { id:"rookendgame_mate1", name:"Мат в 1 ход (Ладейник-1)", prereq:["rook_mate"] },
 ];
