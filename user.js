@@ -36,6 +36,26 @@
     return THEMES.find(t => t.id === user.themeId) || THEMES[0];
   }
 
+  function control(sel) {
+    const el = overlayEl.querySelector(sel);
+
+    return {
+      el,
+
+      val(v) {
+        if (!el) return;
+
+        if (v === undefined) return el.value;
+        el.value = v;
+      },
+
+      on(event, handler) {
+        if (!el) return;
+        el.addEventListener(event, handler);
+      }
+    };
+  }
+
   // --- state ---
 
   function load() {
@@ -199,113 +219,8 @@
 
   // --- UI ---
 
-  function createUI(containerEl) {
+  function bindUI(containerEl) {
     overlayEl = containerEl || document.createElement("div");
-
-    if (!containerEl) {
-      overlayEl.className = "overlay hidden";
-      overlayEl.setAttribute("aria-hidden", "true");
-      document.body.appendChild(overlayEl);
-    }
-
-    overlayEl.innerHTML = `
-  <header class="topbar">
-    <button id="backBtn" class="score-box" type="button">←</button>
-    <div style="font-weight:700;">Профиль</div>
-    <div style="width:56px;"></div>
-  </header>
-
-  <main>
-    <div style="width:min(680px, 100%); margin:0 auto; padding:16px;">
-      <div style="font-size:1.6rem; font-weight:800; color:#111827; margin-bottom:16px;">
-        Профиль
-      </div>
-
-      <input
-        class="user-input"
-        style="margin-top:10px;padding:8px;border-radius:8px;border:1px solid #ccc;width:100%;"
-      />
-
-      <div style="margin-top:14px;">
-        <div style="margin-bottom:6px;">Тема</div>
-        <div class="theme-grid" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-      </div>
-
-      <div style="margin-top:14px;">
-        <div style="margin-bottom:6px;">Базовый уровень</div>
-        <select id="baseLevelSelect" style="padding:8px;border-radius:8px;border:1px solid #ccc;width:100%;">
-          <option value="none">Нет</option>
-          <option value="borislav">Знаток</option>
-        </select>
-      </div>
-
-      <div style="margin-top:14px;">
-        <div style="margin-bottom:6px;">Символ очков</div>
-        <select id="pointsSymbolSelect" style="padding:8px;border-radius:8px;border:1px solid #ccc;width:100%;">
-          <option value="">Нет</option>
-          <option value="¢">¢</option>
-          <option value="₽">₽</option>
-          <option value="🪙">🪙</option>
-          <option value="⭐">⭐</option>
-          <option value="💎">💎</option>
-          <option value="robux">Robux</option>
-        </select>
-      </div>
-
-      <div style="margin-top:14px;">
-        <div style="margin-bottom:6px;">Новые задачи</div>
-        <select id="learnSpeedSelect" style="padding:8px;border-radius:8px;border:1px solid #ccc;width:100%;">
-          <option value="2">Турбо</option>
-          <option value="3">Быстрый</option>
-          <option value="4">Обычный</option>
-          <option value="5">Плавный</option>
-          <option value="7">Медленный</option>
-        </select>
-      </div>
-
-      <div style="margin-top:18px;">
-        <div style="margin-bottom:6px;">Прогресс</div>
-        <div id="progressList" style="font-size:.9em;"></div>
-      </div>
-
-      <div style="margin-top:18px;">
-        <div style="margin-bottom:6px;">Выплатить</div>
-
-        <input
-          id="withdrawInput"
-          type="number"
-          value="100"
-          min="1"
-          style="padding:8px;border-radius:8px;border:1px solid #ccc;width:100%;"
-        />
-
-        <button id="withdrawBtn" class="mode-btn" style="margin-top:8px;background:#f59e0b;">
-          Выплатить
-        </button>
-      </div>
-
-      <div style="margin-top:10px;">
-        <button id="exportBtn" class="mode-btn" style="background:#6366f1;">
-          Выгрузить профиль
-        </button>
-      </div>
-
-      <div style="margin-top:10px;">
-        <input id="importInput" type="file" accept=".json" style="display:none;" />
-
-        <button id="importBtn" class="mode-btn" style="background:#0ea5e9;">
-          Загрузить профиль
-        </button>
-      </div>
-
-      <div style="margin-top:14px;">
-        <button id="saveBtn" class="mode-btn" style="background:#10b981;">
-          Сохранить
-        </button>
-      </div>
-    </div>
-  </main>
-`;
 
     inputEl = overlayEl.querySelector("input");
     const saveBtn = overlayEl.querySelector("#saveBtn");
@@ -615,7 +530,7 @@
   function init(containerEl) {
     hostContainer = containerEl || null;
     load();
-    createUI(containerEl);
+    bindUI(containerEl);
     applyTheme();
     emit();
 
