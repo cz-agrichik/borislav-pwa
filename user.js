@@ -284,6 +284,20 @@
         </button>
       </div>
 
+      <div style="margin-top:10px;">
+        <button id="exportBtn" class="mode-btn" style="background:#6366f1;">
+          Выгрузить профиль
+        </button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <input id="importInput" type="file" accept=".json" style="display:none;" />
+
+        <button id="importBtn" class="mode-btn" style="background:#0ea5e9;">
+          Загрузить профиль
+        </button>
+      </div>
+
       <div style="margin-top:14px;">
         <button id="saveBtn" class="mode-btn" style="background:#10b981;">
           Сохранить
@@ -385,6 +399,126 @@
       alert("Готово! 💸");
       emit();
     });
+
+    const exportBtn = overlayEl.querySelector("#exportBtn");
+
+    exportBtn.addEventListener("click", () => {
+      exportUserData();
+    });
+
+    const importBtn = overlayEl.querySelector("#importBtn");
+    const importInput = overlayEl.querySelector("#importInput");
+
+    importBtn.addEventListener("click", () => {
+      importInput.click();
+    });
+
+    importInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      importUserData(file);
+    });
+  }
+
+  function exportUserData() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+
+      if (!data) {
+        alert("Нет данных для экспорта");
+        return;
+      }
+
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+
+      const userName = (user.name || "user").replace(/\s+/g, "_");
+
+      a.download = `${userName}_profile.json`;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      alert("Ошибка экспорта");
+    }
+  }
+
+  function importUserData(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      try {
+        const text = e.target.result;
+        const parsed = JSON.parse(text);
+
+        const ok = confirm("Перезаписать текущий профиль?");
+        if (!ok) return;
+
+        // 🔥 сохраняем
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+
+        // 🔄 перезагружаем состояние
+        user = parsed;
+
+        // гарантируем поля (важно для старых файлов)
+        if (!user.themeId) user.themeId = "indigo";
+        if (!user.topicStats) user.topicStats = {};
+        if (!user.baseLevel) user.baseLevel = "none";
+        if (!user.learnSpeed) user.learnSpeed = 4;
+        if (!user.pointsSymbol) user.pointsSymbol = "";
+
+        save();
+        applyTheme();
+        emit();
+        refreshUI();
+
+        alert("Профиль загружен ✅");
+      } catch (err) {
+        console.error(err);
+        alert("Ошибка загрузки файла");
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  function refreshUI() {
+    if (!overlayEl) return;
+
+    // имя
+    if (inputEl) {
+      inputEl.value = user.name;
+    }
+
+    // селекты
+    const baseSelect = overlayEl.querySelector("#baseLevelSelect");
+    if (baseSelect) baseSelect.value = user.baseLevel;
+
+    const learnSelect = overlayEl.querySelector("#learnSpeedSelect");
+    if (learnSelect) learnSelect.value = user.learnSpeed;
+
+    const symbolSelect = overlayEl.querySelector("#pointsSymbolSelect");
+    if (symbolSelect) symbolSelect.value = user.pointsSymbol;
+
+    // тема (рамки)
+    const grid = overlayEl.querySelector(".theme-grid");
+    if (grid) {
+      [...grid.children].forEach((el, i) => {
+        const theme = THEMES[i];
+        el.style.border =
+          theme.id === user.themeId
+            ? "3px solid #111"
+            : "2px solid #fff";
+      });
+    }
+
+    // прогресс
+    renderProgress();
   }
 
   function renderProgress() {

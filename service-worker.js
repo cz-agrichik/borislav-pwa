@@ -1,4 +1,4 @@
-const CACHE_NAME = "app-v8";
+const CACHE_NAME = "app-v10";
 
 const ASSETS = [
   "/",
