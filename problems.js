@@ -255,9 +255,11 @@ function genMathFromDataset(list, tag, typeId) {
       const prereq = node.prereq || [];
 
       for (const id of prereq) {
+        console.log("checking prerequisite", id);
         const pNode = window.Course.find(c => c.id === id);
         if (!pNode) continue;
 
+        console.log("Course found!", pNode);
         const pLevel = resolveLevel(pNode);
 
         // если встретили слабые статусы → сразу not_started
