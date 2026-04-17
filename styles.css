@@ -357,3 +357,95 @@ button:active {
 
   image-rendering: -webkit-optimize-contrast;
 }
+
+/* ============================= */
+/* PROFILE FOLDABLE UI */
+/* ============================= */
+
+.fold {
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 12px 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.fold summary {
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 6px 0;
+  list-style: none;
+}
+
+/* убираем дефолтный треугольник */
+.fold summary::-webkit-details-marker {
+  display: none;
+}
+
+.fold summary::after {
+  content: "▾";
+  float: right;
+  transition: transform 0.2s;
+}
+
+.fold[open] summary::after {
+  transform: rotate(180deg);
+}
+
+/* поля */
+.select,
+.input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #cbd5f5;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+/* кнопки внутри профиля */
+.mode-btn.warn {
+  margin-top: 8px;
+  background: #f59e0b;
+}
+
+.mode-btn.secondary {
+  margin-top: 10px;
+  background: #6366f1;
+}
+
+/* ============================= */
+/* BIG SAVE BUTTON */
+/* ============================= */
+
+.save-big {
+  margin-top: 22px;
+  width: 100%;
+  padding: 18px;
+  border-radius: 16px;
+  border: none;
+
+  background: linear-gradient(135deg, #10b981, #22c55e);
+  color: white;
+
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 18px rgba(16,185,129,0.45);
+
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.save-big:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 10px rgba(16,185,129,0.35);
+}
+
+/* PROFILE PAGE FIX */
+#userPage main {
+  justify-content: flex-start;
+  padding-top: 10px;
+}
