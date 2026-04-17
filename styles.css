@@ -75,16 +75,18 @@ header.topbar {
 }
 
 .mode-btn {
-  background: #10b981;
-  color: white;
-  border: none;
+  background: white;
+  color: #111827;
+
+  border: 2px solid #e2e8f0;
   border-radius: 9999px;
+
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
 }
 
 .mode-btn:active {
-  background: #34d399;
+  background: #f1f5f9;
 }
 
 .mode-btn:disabled {

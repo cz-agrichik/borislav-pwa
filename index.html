@@ -6,7 +6,7 @@
     <title>Енотик-математик</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#2e3a59" />
-    <link rel="stylesheet" href="styles.css?v=2" />
+    <link rel="stylesheet" href="styles.css?v=3" />
     <script src="donut.js"></script>
     <script src="user.js"></script>
     
@@ -268,10 +268,19 @@
   renderScore();
 
   User.init(document.getElementById("userPage"));
-  modeBtn.textContent = User.get().name;
+
+  function renderUserName() {
+    const u = User.get();
+    const avatar = u.avatar || "";
+    const name = u.name || "Игрок";
+
+    modeBtn.textContent = avatar ? `${avatar} ${name}` : name;
+  }
+
+  renderUserName();  
 
   User.onChange((u) => {
-    modeBtn.textContent = u.name;
+    renderUserName();
     renderScore();
   });
 
