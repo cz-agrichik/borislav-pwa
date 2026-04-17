@@ -169,4 +169,6 @@ window.Course = [
 
   { id:"rookendgame_mate1", name:"Мат в 1 ход (Ладейник-1)", prereq:["rook_mate"] },
   { id:"rookendgame_mate1_level2", name:"Мат в 1 ход (Ладейник-2)", prereq:["rookendgame_mate1"] },
+
+  { id:"puzzle_promotion_level1", name:"Пешечник-1", prereq:["puzzle_promotion_level1"] },
 ];
