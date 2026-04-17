@@ -22,6 +22,11 @@
     { id: "slate",  bg: "#f1f5f9", topbar: "#334155" }
   ];
 
+  const AVATARS = [
+  "","🚗","🐱","🐶",
+  "🦊","🐼","🦄","🐵"
+];
+
   // --- utils ---
 
   function guid() {
@@ -78,6 +83,9 @@
       }
       if (!user.pointsSymbol) {
         user.pointsSymbol = "";
+      }
+      if (!user.avatar) {
+        user.avatar = AVATARS[0];
       }
     } else {
       user = {
@@ -231,8 +239,8 @@
     THEMES.forEach(theme => {
       const el = document.createElement("div");
 
-      el.style.width = "42px";
-      el.style.height = "42px";
+      el.style.width = "100%";
+      el.style.height = "48px";
       el.style.borderRadius = "10px";
       el.style.cursor = "pointer";
 
@@ -277,6 +285,29 @@
       symbolSelect.addEventListener("change", () => {
         setPointsSymbol(symbolSelect.value);
       });
+    });
+
+    const avatarGrid = overlayEl.querySelector(".avatar-grid");
+
+    AVATARS.forEach(a => {
+      const el = document.createElement("div");
+      el.className = "avatar-item";
+      el.textContent = a;
+
+      if (user.avatar === a) {
+        el.classList.add("active");
+      }
+
+      el.addEventListener("click", () => {
+        user.avatar = a;
+        save();
+        emit();
+
+        [...avatarGrid.children].forEach(c => c.classList.remove("active"));
+        el.classList.add("active");
+      });
+
+      avatarGrid.appendChild(el);
     });
 
     saveBtn.addEventListener("click", () => {
