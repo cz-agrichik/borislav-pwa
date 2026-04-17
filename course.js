@@ -148,19 +148,25 @@ window.Course = [
     id: "linear_mate_rook",
     name: "Линейный мат ♕ + ♖",
     prereq: ["rook_mate"]
-    },
-    {
-        id: "kq_squeeze",
-        name: "Мат ♔ + ♕, техника прижатия (1)",
-        prereq: ["queen_mate"]
-    },
-    {
-        id: "kq_squeeze2",
-        name: "Мат ♔ + ♕, техника прижатия (2)",
-        prereq: ["queen_mate"]
-    },
+  },
+  {
+      id: "kq_squeeze",
+      name: "Мат ♔ + ♕, техника прижатия (1)",
+      prereq: ["queen_mate"]
+  },
+  {
+      id: "kq_squeeze2",
+      name: "Мат ♔ + ♕, техника прижатия (2)",
+      prereq: ["queen_mate"]
+  },
+  {
+      id: "kq_squeeze3",
+      name: "Мат ♔ + ♕, техника прижатия (3)",
+      prereq: ["queen_mate"]
+  },
 
   { id:"knight_fork", name:"Вилка конём", prereq:["knight_capture"] },
 
   { id:"rookendgame_mate1", name:"Мат в 1 ход (Ладейник-1)", prereq:["rook_mate"] },
+  { id:"rookendgame_mate1_level2", name:"Мат в 1 ход (Ладейник-2)", prereq:["rookendgame_mate1"] },
 ];

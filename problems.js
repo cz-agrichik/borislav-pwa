@@ -164,10 +164,12 @@ function genMathFromDataset(list, tag, typeId) {
 
     {id:"kq_squeeze", gen:()=>genFromDataset(window.KQSqueezeProblems, "kq_squeeze")},
     {id:"kq_squeeze2", gen:()=>genFromDataset(window.KQSqueezeV2Problems, "kq_squeeze2")},
+    {id:"kq_squeeze3", gen:()=>genFromDataset(window.KQSqueezeV3Problems, "kq_squeeze3")},
 
     {id:"knight_fork", gen:()=>genFromDataset(window.KnightForkProblems, "knight_fork")},
 
     {id:"rookendgame_mate1", gen:()=>genFromDataset(window.MateIn1Problems, "rookendgame_mate1")},
+    {id:"rookendgame_mate1_level2", gen:()=>genFromDataset(window.MateIn1Level2Problems, "rookendgame_mate1_level2")},
   ];
 
   function taskTypeTitle(typeId) {
