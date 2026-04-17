@@ -334,6 +334,27 @@
 
       importUserData(file);
     });
+
+    // --- math/chess toggle (UI only) ---
+    const switches = overlayEl.querySelectorAll(".mode-btn-big");
+
+    switches.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const active = overlayEl.querySelectorAll(".mode-btn-big.active");
+
+        const isActive = btn.classList.contains("active");
+
+        // если хотим выключить
+        if (isActive) {
+          // нельзя выключить последний
+          if (active.length <= 1) return;
+
+          btn.classList.remove("active");
+        } else {
+          btn.classList.add("active");
+        }
+      });
+    });
   }
 
   function exportUserData() {
