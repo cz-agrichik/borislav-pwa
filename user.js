@@ -254,6 +254,29 @@
 
   // --- UI ---
 
+  function renderProfileUI() {
+    if (!overlayEl) return;
+
+    const isNew = !!user.isNew;
+
+    // fold'ы
+    overlayEl.querySelectorAll(".fold").forEach((el, i) => {
+      if (isNew && i !== 0) {
+        el.style.display = "none";
+      } else {
+        el.style.display = "";
+      }
+    });
+
+    // кнопка
+    const saveBtn = overlayEl.querySelector("#saveBtn");
+    if (saveBtn) {
+      saveBtn.textContent = isNew
+        ? "🚀 Начать"
+        : "💾 Сохранить изменения";
+    }
+  }
+
   function bindUI(containerEl) {
     overlayEl = containerEl || document.createElement("div");
 
@@ -339,6 +362,13 @@
 
     saveBtn.addEventListener("click", () => {
       setName(inputEl.value);
+
+      if (user.isNew) {
+        user.isNew = false;
+        save();
+      }
+      refreshUI();
+
       close();
     });
 
@@ -392,6 +422,19 @@
 
       importUserData(file);
     });
+
+    const resetBtn = overlayEl.querySelector("#resetProfileBtn");
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        const ok = confirm("Удалить профиль? Всё прогресс пропадёт 😢");
+        if (!ok) return;
+
+        localStorage.removeItem(STORAGE_KEY);
+
+        location.reload(); // самый чистый вариант
+      });
+    }
 
     // --- math/chess toggle (UI only) ---
     const switches = overlayEl.querySelectorAll(".mode-btn-big");
@@ -521,6 +564,8 @@
 
     // прогресс
     renderProgress();
+
+    renderProfileUI();
   }
 
   function renderProgress() {
@@ -619,13 +664,12 @@
     load();
     bindUI(containerEl);
     applyTheme();
+    renderProfileUI();
     emit();
 
     if (user.isNew) {
       setTimeout(() => {
         open();
-        user.isNew = false;
-        save();
       }, 0);
     }
   }
