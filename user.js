@@ -87,6 +87,12 @@
       if (!user.avatar) {
         user.avatar = AVATARS[0];
       }
+      if (!user.modes) {
+        user.modes = {
+          math: true,
+          chess: true
+        };
+      }
     } else {
       user = {
         id: guid(),
@@ -94,7 +100,11 @@
         themeId: "indigo",
         topicStats: {},
         isNew: true,
-        baseLevel: "none"
+        baseLevel: "none",
+        modes: {
+          math: true,
+          chess: false
+        }
       };
       save();
     }
@@ -206,6 +216,23 @@
 
   function getPointsSymbol() {
     return user.pointsSymbol || "";
+  }
+
+  function setMode(mode, value) {
+    if (!user.modes) {
+      user.modes = { math: true, chess: true };
+    }
+
+    user.modes[mode] = value;
+    save();
+    emit();
+  }
+
+  function getModes() {
+    if (!user) {
+      load();
+    }
+    return user.modes || { math: true, chess: true };
   }
 
   function onChange(fn) {
@@ -370,20 +397,28 @@
     const switches = overlayEl.querySelectorAll(".mode-btn-big");
 
     switches.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const active = overlayEl.querySelectorAll(".mode-btn-big.active");
+      const mode = btn.dataset.mode;
 
+      // начальное состояние
+      const modes = user.modes || { math: true, chess: true };
+      if (modes[mode]) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+
+      btn.addEventListener("click", () => {
         const isActive = btn.classList.contains("active");
 
-        // если хотим выключить
-        if (isActive) {
-          // нельзя выключить последний
-          if (active.length <= 1) return;
+        const activeBtns = overlayEl.querySelectorAll(".mode-btn-big.active");
 
-          btn.classList.remove("active");
-        } else {
-          btn.classList.add("active");
-        }
+        // нельзя выключить последний
+        if (isActive && activeBtns.length <= 1) return;
+
+        btn.classList.toggle("active");
+
+        const newVal = !isActive;
+        setMode(mode, newVal);
       });
     });
   }
@@ -638,6 +673,8 @@
     getLearnSpeed,
     setPointsSymbol,
     getPointsSymbol,
+    setMode,
+    getModes,
   };
 
 })();

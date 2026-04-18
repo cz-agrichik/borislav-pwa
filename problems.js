@@ -288,10 +288,18 @@ function genMathFromDataset(list, tag, typeId) {
   }
 
   function getDifficultyPolicy() {
-    return window.Course.map(node => ({
-      item: node.id,
-      level: resolveLevel(node)
-    }));
+    const modes = window.User.getModes();
+
+    return window.Course
+      .filter(node => {
+        if (node.type === "chess" && !modes.chess) return false;
+        if (node.type === "math" && !modes.math) return false;
+        return true;
+      })
+      .map(node => ({
+        item: node.id,
+        level: resolveLevel(node)
+      }));
   }
   
 
