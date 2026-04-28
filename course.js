@@ -220,4 +220,10 @@ window.Course = [
     type: "chess",
     prereq: ["pawn_moves"]
   },
+  {
+    id: "kingside_mate1_lvl1",
+    name: "Мат в 1 ход (Королевский фланг-1)",
+    type: "chess",
+    prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
+  }
 ];
