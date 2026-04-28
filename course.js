@@ -240,7 +240,7 @@ window.Course = [
   },
   {
     id: "pillsburys_mate1_lvl1",
-    name: "Мат в 1 ход (Вторжение на 8ую-1)",
+    name: "Мат в 1 ход (Пильсбери-1)",
     type: "chess",
     prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
   },
