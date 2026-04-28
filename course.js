@@ -237,5 +237,17 @@ window.Course = [
     name: "Мат в 1 ход (Вторжение на 8ую-1)",
     type: "chess",
     prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
+  },
+  {
+    id: "pillsburys_mate1_lvl1",
+    name: "Мат в 1 ход (Вторжение на 8ую-1)",
+    type: "chess",
+    prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
+  },
+  {
+    id: "f2f7_mate1_lvl1",
+    name: "Мат в 1 ход (F2 или F7-1)",
+    type: "chess",
+    prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
   }
 ];

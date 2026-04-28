@@ -174,6 +174,8 @@ function genMathFromDataset(list, tag, typeId) {
     {id:"kingside_mate1_lvl1", gen:()=>genFromDataset(window.PuzzleKingsideMateIn1Level1Problems, "kingside_mate1_lvl1")},
     {id:"opera_mate1_lvl1", gen:()=>genFromDataset(window.PuzzleOperaMateIn1Level1Problems, "opera_mate1_lvl1")},
     {id:"backrank_mate1_lvl1", gen:()=>genFromDataset(window.PuzzleBackrankMateIn1Level1Problems, "backrank_mate1_lvl1")},
+    {id:"pillsburys_mate1_lvl1", gen:()=>genFromDataset(window.PuzzlePillsburysMateIn1Level1Problems, "pillsburys_mate1_lvl1")},
+    {id:"f2f7_mate1_lvl1", gen:()=>genFromDataset(window.PuzzleF2f7MateIn1Level1Problems, "f2f7_mate1_lvl1")},
   ];
 
   function taskTypeTitle(typeId) {
