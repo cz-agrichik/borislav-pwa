@@ -249,5 +249,17 @@ window.Course = [
     name: "Мат в 1 ход (F2 или F7-1)",
     type: "chess",
     prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
+  },
+  {
+    id: "hanging_mate1_lvl1",
+    name: "Мат в 1 ход (Висячая-1)",
+    type: "chess",
+    prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
+  },
+  {
+    id: "queenside_mate1_lvl1",
+    name: "Мат в 1 ход (Ферзевый фланг-1)",
+    type: "chess",
+    prereq: ["rook_capture", "king_capture", "bishop_capture", "knight_capture", "queen_capture", "pawn_capture"]
   }
 ];
